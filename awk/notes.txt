@@ -1,0 +1,11 @@
+The base CSV parse in AWK is from here:
+http://lorance.freeshell.org/csv/
+Some ideas and description from here:
+https://stackoverflow.com/questions/4205431/parse-a-csv-using-awk-and-ignoring-commas-inside-a-field
+
+Pretty good tutorial
+https://www.grymoire.com/Unix/Awk.html
+
+print file and owner
+ls -l | awk '{ print $9, "\t", $3}'
+
