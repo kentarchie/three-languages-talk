@@ -1,5 +1,10 @@
 #!/usr/bin/gawk -f
 @include "csv.awk" # from http://lorance.freeshell.org/csv/
+# https://stackoverflow.com/questions/9985528/how-can-i-trim-white-space-from-a-variable-in-awk
+function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
+function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
+function trim(s) { return rtrim(ltrim(s)); }
+
 BEGIN { #run once before processing lines
 		#print "START" 
 		lines = 0;
@@ -30,7 +35,9 @@ BEGIN { #run once before processing lines
 			for (i=1; i <= length(titles); i++) {
 				if(i > 1) printf(","); # field seperator
 				format = (index(supportedFormats,formatList[i]) != 0) ?  formatStrings[formatList[i]] : formatStrings["s"];
-				printf(format, titles[i], csv[i]);
+				gsub(/\"/,"",csv[i]); # remove quotes
+				finalValue = trim(csv[i]); #remove spaces
+				printf(format, titles[i], finalValue);
 			}
 			print "}"; # end of JSON object
 		} # all other lines
@@ -38,5 +45,5 @@ BEGIN { #run once before processing lines
 
 END   { # run once after processing lines
 		print "]"; # end of JSON array
-		printf("END: processed %d lines\n",lines-1);
+		#printf("END: processed %d lines\n",lines-1);
 }
